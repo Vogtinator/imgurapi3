@@ -207,7 +207,7 @@ void ImgurAPI3::doWork()
     auto &work = m_work_queue.front();
     
     if(work.type != ImgurAPI3ActionType::ANON_IMG_UPLOAD && !m_auth.authorize())
-        return; /* Wait for the authenticated() signal. */
+        return; /* Wait for the authorized() signal. */
 
     switch(work.type)
     {

@@ -112,10 +112,15 @@ void KOAuth2::tokenResponse()
 
 bool KOAuth2::authorize()
 {
-    if(!m_refresh_token.isEmpty() && !m_access_token.isEmpty())
+    if(!m_access_token.isEmpty())
         return true;
 
-    if(m_pin.isEmpty())
+    if(!m_refresh_token.isEmpty() || !m_pin.isEmpty())
+    {
+        /* Just request a (new) access_token. */
+        requestAccessToken();
+    }
+    else
     {
         /* We need to request authorization before doing anything else. */
         QUrlQuery url_query;
@@ -124,11 +129,6 @@ bool KOAuth2::authorize()
         m_auth_url.setQuery(url_query);
     
         emit requestPin(m_auth_url);
-    }
-    else
-    {
-        /* Just request a (new) access_token. */
-        requestAccessToken();
     }
 
     return false;
